@@ -493,8 +493,9 @@ function LoginScreen({ onLogin }) {
           <button type="submit" className="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-lg shadow-md transition-colors uppercase tracking-wider mt-2">Masuk Sistem</button>
         </form>
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
-          <p className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Simbun V.01</p>
-          <p className="text-xs text-gray-500 font-medium">by : Sugiharto</p>
+          <p className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Simbun V.02</p>
+          <p className="text-xs text-gray-500 font-medium">Dinas Pertanian Kabupaten Pangandaran 2026</p>
+          <p className="text-xs font-bold text-gray-400 font-medium">Oleh : Sugiharto</p>
         </div>
       </div>
     </div>

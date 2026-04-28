@@ -1014,11 +1014,14 @@ function KecamatanLaporanTahunan({ user, db, showToast, showDialog, masterData }
       await setDoc(doc(firestoreDb, "dbT", key), formData); showToast('Tersimpan!'); setView('list');
     };
 
-    if (adaError) { 
-      showDialog('Peringatan Ketidaksesuaian', 'Ada ketidaksesuaian antara Jumlah Luas (Kolom 11) dan Luas Akhir (Kolom 7) di beberapa komoditas.\n\nTetap ingin menyimpan?', proceedSave);
+if (adaError) { 
+      // LOGIKA BARU: MENGHENTIKAN PROSES SECARA PAKSA BILA ERROR
+      alert("PENYIMPANAN DIBATALKAN!\n\nKhusus Laporan Semester, Jumlah Luas Tanaman (Kolom 11) wajib sama persis dengan Luas Akhir (Kolom 7) di setiap komoditas.\n\nSilakan periksa kembali angka yang berwarna merah di tabel.");
+      return; 
     } else {
       proceedSave();
     }
+
   };
 
   if (view === 'list') {

@@ -503,9 +503,10 @@ function LoginScreen({ onLogin }) {
 
 // --- KOMPONEN: DASHBOARD HOME ---
 function HomeDashboard({ user, atapT, atapS }) {
-  const [selectedYear, setSelectedYear] = useState('2024');
+  // Mengambil tahun saat ini (misal: 2026), dikurangi 1, lalu dijadikan teks ("2025")
+  const [selectedYear, setSelectedYear] = useState((new Date().getFullYear() - 1).toString());
 
-const stats = useMemo(() => {
+  const stats = useMemo(() => {
     let totalLuas = 0, totalProduksi = 0, totalPetani = 0;
     const komoditasMap = {};
 
@@ -515,8 +516,11 @@ const stats = useMemo(() => {
         const kecData = atapT[key].data;
         Object.keys(kecData).forEach(kom => {
           const r = kecData[kom];
-          // Menggunakan parseFloat agar dihitung secara matematika
-          totalLuas += parseFloat(r.jumlah) || 0; 
+          
+          // PERBAIKAN: Menjumlahkan TBM, TM, dan TTM secara manual karena 'jumlah' tidak ada di database
+          const luasTahunan = (parseFloat(r.tbm) || 0) + (parseFloat(r.tm) || 0) + (parseFloat(r.ttm) || 0);
+          totalLuas += luasTahunan; 
+
           totalProduksi += parseFloat(r.produksi) || 0; 
           totalPetani += parseFloat(r.petani) || 0;
           komoditasMap[kom] = (komoditasMap[kom] || 0) + (parseFloat(r.produksi) || 0);

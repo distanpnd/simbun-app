@@ -505,7 +505,7 @@ function LoginScreen({ onLogin }) {
 function HomeDashboard({ user, atapT, atapS }) {
   const [selectedYear, setSelectedYear] = useState('2024');
 
-  const stats = useMemo(() => {
+const stats = useMemo(() => {
     let totalLuas = 0, totalProduksi = 0, totalPetani = 0;
     const komoditasMap = {};
 
@@ -515,8 +515,11 @@ function HomeDashboard({ user, atapT, atapS }) {
         const kecData = atapT[key].data;
         Object.keys(kecData).forEach(kom => {
           const r = kecData[kom];
-          totalLuas += r.jumlah || 0; totalProduksi += r.produksi || 0; totalPetani += r.petani || 0;
-          komoditasMap[kom] = (komoditasMap[kom] || 0) + (r.produksi || 0);
+          // Menggunakan parseFloat agar dihitung secara matematika
+          totalLuas += parseFloat(r.jumlah) || 0; 
+          totalProduksi += parseFloat(r.produksi) || 0; 
+          totalPetani += parseFloat(r.petani) || 0;
+          komoditasMap[kom] = (komoditasMap[kom] || 0) + (parseFloat(r.produksi) || 0);
         });
       }
     });
@@ -527,8 +530,11 @@ function HomeDashboard({ user, atapT, atapS }) {
         const kecData = atapS[key].data;
         Object.keys(kecData).forEach(kom => {
           const r = kecData[kom];
-          totalLuas += r.luas || 0; totalProduksi += r.produksi || 0; totalPetani += r.petani || 0;
-          komoditasMap[kom] = (komoditasMap[kom] || 0) + (r.produksi || 0);
+          // Menggunakan parseFloat agar dihitung secara matematika
+          totalLuas += parseFloat(r.luas) || 0; 
+          totalProduksi += parseFloat(r.produksi) || 0; 
+          totalPetani += parseFloat(r.petani) || 0;
+          komoditasMap[kom] = (komoditasMap[kom] || 0) + (parseFloat(r.produksi) || 0);
         });
       }
     });
@@ -538,6 +544,7 @@ function HomeDashboard({ user, atapT, atapS }) {
 
     return { totalLuas, totalProduksi, totalPetani, topKomoditas, maxProd };
   }, [atapT, atapS, user.role, user.wilayah, selectedYear]);
+
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">

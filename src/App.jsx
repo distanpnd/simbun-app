@@ -494,7 +494,7 @@ function LoginScreen({ onLogin }) {
         </form>
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
           <p className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Simbun V.01</p>
-          <p className="text-xs text-gray-500 font-medium">Dinas Pertanian Kabupaten Pangandaran</p>
+          <p className="text-xs text-gray-500 font-medium">by : Sugiharto</p>
         </div>
       </div>
     </div>

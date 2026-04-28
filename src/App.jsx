@@ -259,7 +259,8 @@ export default function App() {
   }, []);
 
   const showToast = (msg, type = 'success') => { setToast({ msg, type }); setTimeout(() => setToast(null), 3000); };
-  const showDialog = (title, message, onConfirm) => { setDialog({ isOpen: true, title, message, onConfirm, onCancel: () => setDialog(null) }); };
+  
+  const showDialog = (title, message, onConfirm = null, isAlertOnly = false) => { setDialog({ isOpen: true, title, message, onConfirm, isAlertOnly, onCancel: () => setDialog(null) }); };
 
   const handleLogin = (credentials) => {
     const userRecord = usersDb[credentials.username.toLowerCase()];
@@ -303,14 +304,23 @@ export default function App() {
 
   return (
     <div className="flex h-screen bg-gray-50 font-sans text-gray-800 overflow-hidden">
-      {dialog && dialog.isOpen && (
+     {dialog && dialog.isOpen && (
         <div className="fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4 animate-in fade-in">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 animate-in zoom-in-95">
-            <h3 className="text-lg font-bold text-gray-900 mb-2 flex items-center gap-2"><AlertCircle className="w-5 h-5 text-amber-500"/> {dialog.title}</h3>
+            <h3 className={`text-lg font-bold mb-2 flex items-center gap-2 ${dialog.isAlertOnly ? 'text-red-600' : 'text-gray-900'}`}>
+              <AlertCircle className={`w-5 h-5 ${dialog.isAlertOnly ? 'text-red-500' : 'text-amber-500'}`}/> 
+              {dialog.title}
+            </h3>
             <p className="text-gray-600 text-sm mb-6 whitespace-pre-wrap leading-relaxed">{dialog.message}</p>
             <div className="flex justify-end gap-3">
-              <button onClick={dialog.onCancel} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-bold hover:bg-gray-200 transition-colors">Batal</button>
-              <button onClick={() => { dialog.onConfirm(); setDialog(null); }} className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition-colors shadow-sm">Ya, Lanjutkan</button>
+              {dialog.isAlertOnly ? (
+                <button onClick={dialog.onCancel} className="px-4 py-2 bg-red-600 text-white rounded-lg font-bold hover:bg-red-700 transition-colors shadow-sm">Tutup & Perbaiki</button>
+              ) : (
+                <>
+                  <button onClick={dialog.onCancel} className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-bold hover:bg-gray-200 transition-colors">Batal</button>
+                  <button onClick={() => { if(dialog.onConfirm) dialog.onConfirm(); setDialog(null); }} className="px-4 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition-colors shadow-sm">Ya, Lanjutkan</button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -1015,8 +1025,13 @@ function KecamatanLaporanTahunan({ user, db, showToast, showDialog, masterData }
     };
 
 if (adaError) { 
-      // LOGIKA BARU: MENGHENTIKAN PROSES SECARA PAKSA BILA ERROR
-      alert("PENYIMPANAN DIBATALKAN!\n\nJumlah Luas Tanaman (Kolom 11) wajib sama persis dengan Luas Akhir (Kolom 7) di setiap komoditas.\n\nSilakan periksa kembali angka yang berwarna merah di tabel.");
+      // Memanggil pop-up khusus mode Error (parameter ke-4 diset 'true')
+      showDialog(
+        'Penyimpanan Dibatalkan!', 
+        'Jumlah Luas Tanaman (Kolom 11) wajib sama persis dengan Luas Akhir (Kolom 7) di setiap komoditas.\n\nSilakan periksa kembali angka yang berwarna merah di tabel.', 
+        null, 
+        true
+      );
       return; 
     } else {
       proceedSave();

@@ -1016,7 +1016,7 @@ function KecamatanLaporanTahunan({ user, db, showToast, showDialog, masterData }
 
 if (adaError) { 
       // LOGIKA BARU: MENGHENTIKAN PROSES SECARA PAKSA BILA ERROR
-      alert("PENYIMPANAN DIBATALKAN!\n\nKhusus Laporan Semester, Jumlah Luas Tanaman (Kolom 11) wajib sama persis dengan Luas Akhir (Kolom 7) di setiap komoditas.\n\nSilakan periksa kembali angka yang berwarna merah di tabel.");
+      alert("PENYIMPANAN DIBATALKAN!\n\nJumlah Luas Tanaman (Kolom 11) wajib sama persis dengan Luas Akhir (Kolom 7) di setiap komoditas.\n\nSilakan periksa kembali angka yang berwarna merah di tabel.");
       return; 
     } else {
       proceedSave();

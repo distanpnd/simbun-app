@@ -1028,7 +1028,7 @@ if (adaError) {
       // Memanggil pop-up khusus mode Error (parameter ke-4 diset 'true')
       showDialog(
         'Penyimpanan Dibatalkan!', 
-        'Jumlah Luas Tanaman (Kolom 11) wajib sama persis dengan Luas Akhir (Kolom 7) di setiap komoditas.\n\nSilakan periksa kembali angka yang berwarna merah di tabel.', 
+        'Jumlah Luas Areal (Kolom 11) harus sama dengan Luas Tanaman Akhir Semester (Kolom 7) di setiap komoditas.\n\nSilakan periksa kembali angka yang berwarna merah di tabel.', 
         null, 
         true
       );

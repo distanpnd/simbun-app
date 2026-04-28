@@ -495,7 +495,7 @@ function LoginScreen({ onLogin }) {
         <div className="mt-8 pt-6 border-t border-gray-100 text-center">
           <p className="text-xs font-bold text-gray-400 tracking-widest uppercase mb-1">Simbun V.02</p>
           <p className="text-xs text-gray-500 font-medium">Dinas Pertanian Kabupaten Pangandaran 2026</p>
-          <p className="text-xs font-bold text-gray-400 font-medium">Oleh : Sugiharto</p>
+          <p className="text-xs font-bold text-gray-400/70 mt-2">Oleh : Sugiharto</p>
         </div>
       </div>
     </div>

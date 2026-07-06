@@ -52,6 +52,7 @@ const TAHUN_OPTIONS = Array.from({ length: maxYear - startYear + 1 }, (_, i) => 
 
 const SEMESTER_OPTIONS = ['I', 'II'];
 const TRIWULAN_OPTIONS = ['I', 'II', 'III', 'IV'];
+const COMPARISON_PRECISION = 4;
 
 const LOGO_1_URL = "https://lh3.googleusercontent.com/d/1fKmizUvWTEZBX3KXHhITTeuLn3Q32QKw";
 const LOGO_2_URL = "https://lh3.googleusercontent.com/d/1-NfvFlxhTZP0xtGvdlUz0pSN-I52L0M1";
@@ -1028,7 +1029,7 @@ function KecamatanLaporanTahunan({ user, db, showToast, showDialog, masterData }
       const row = formData[kom];
       const col7 = (parseFloat(row.col3)||0) + (parseFloat(row.col5)||0) - (parseFloat(row.col6)||0);
       const col11 = (parseFloat(row.col8)||0) + (parseFloat(row.col9)||0) + (parseFloat(row.col10)||0);
-      if (col7 > 0 && col7 !== col11) adaError = true;
+      if (col7 > 0 && col7.toFixed(COMPARISON_PRECISION) !== col11.toFixed(COMPARISON_PRECISION)) adaError = true;
     });
 
     const proceedSave = async () => {
@@ -2248,10 +2249,10 @@ function FormSPRTT({ data, setData, readOnly, meta, rowLabels, wujudMap }) {
     const row = data[label] || emptyRow(label, wujudMap);
     const col7 = num(row.col3) + num(row.col5) - num(row.col6);
     const col11 = num(row.col8) + num(row.col9) + num(row.col10);
-    const col13 = num(row.col9) > 0 ? (num(row.col12) / num(row.col9)).toFixed(2) : 0;
-    const isCol11Error = col7 > 0 && col11 !== col7;
+    const col13 = num(row.col9) > 0 ? (num(row.col12) / num(row.col9)) : 0;
+    const isCol11Error = col7 > 0 && col7.toFixed(COMPARISON_PRECISION) !== col11.toFixed(COMPARISON_PRECISION);
 
-    const renderInputCell = (field, width = 'w-20', type = 'number') => (
+    const renderInputCell = (field, width = 'w-24', type = 'number') => (
       <td className="border border-gray-400 p-1"><input disabled={readOnly} type={type} value={row[field]} onChange={(e) => handleInputChange(label, field, e.target.value)} className={`w-full ${width} px-2 py-1 text-sm border border-transparent focus:border-emerald-500 focus:ring-1 rounded ${readOnly ? 'bg-transparent text-gray-500 font-medium' : 'bg-gray-50 hover:bg-white'} transition-colors ${type==='number' ? 'text-right' : ''}`} placeholder="-" /></td>
     );
 
@@ -2259,11 +2260,11 @@ function FormSPRTT({ data, setData, readOnly, meta, rowLabels, wujudMap }) {
       <tr key={label} className="hover:bg-emerald-50/50 transition-colors">
         <td className="border border-gray-400 p-2 text-center text-sm">{index + 1}</td><td className="border border-gray-400 p-2 text-sm font-medium whitespace-nowrap">{label}</td>
         {renderInputCell('col3')}{renderInputCell('col4')}{renderInputCell('col5')}{renderInputCell('col6')}
-        <td className="border border-gray-400 p-2 text-right text-sm font-semibold bg-gray-100">{col7 > 0 ? col7.toLocaleString('id-ID') : '-'}</td>
+        <td className="border border-gray-400 p-2 text-right text-sm font-semibold bg-gray-100">{col7 > 0 ? Number(col7.toFixed(COMPARISON_PRECISION)).toLocaleString('id-ID') : '-'}</td>
         {renderInputCell('col8')}{renderInputCell('col9')}{renderInputCell('col10')}
-        <td className={`border border-gray-400 p-2 text-right text-sm font-bold ${isCol11Error && !readOnly ? 'bg-red-100 text-red-600' : 'bg-emerald-50 text-emerald-700'}`}>{col11 > 0 ? col11.toLocaleString('id-ID') : '-'}</td>
+        <td className={`border border-gray-400 p-2 text-right text-sm font-bold ${isCol11Error && !readOnly ? 'bg-red-100 text-red-600' : 'bg-emerald-50 text-emerald-700'}`}>{col11 > 0 ? Number(col11.toFixed(COMPARISON_PRECISION)).toLocaleString('id-ID') : '-'}</td>
         {renderInputCell('col12', 'w-24')}
-        <td className="border border-gray-400 p-2 text-right text-sm bg-gray-100 text-gray-600">{col13 > 0 ? Number(col13).toLocaleString('id-ID') : '-'}</td>
+        <td className="border border-gray-400 p-2 text-right text-sm bg-gray-100 text-gray-600">{col13 > 0 ? Number(col13.toFixed(COMPARISON_PRECISION)).toLocaleString('id-ID') : '-'}</td>
         {renderInputCell('col14')}{renderInputCell('col15', 'w-24', 'text')}{renderInputCell('col16', 'w-32', 'text')}
       </tr>
     );
@@ -2277,7 +2278,7 @@ function FormSPRTT({ data, setData, readOnly, meta, rowLabels, wujudMap }) {
       t.c7+=num(r.col3)+num(r.col5)-num(r.col6); t.c8+=num(r.col8); t.c9+=num(r.col9); t.c10+=num(r.col10);
       t.c11+=num(r.col8)+num(r.col9)+num(r.col10); t.c12+=num(r.col12); t.c14+=num(r.col14);
     });
-    const f = (v) => v > 0 ? v.toLocaleString('id-ID') : '-';
+    const f = (v) => v > 0 ? Number(v.toFixed(COMPARISON_PRECISION)).toLocaleString('id-ID') : '-';
     return (
       <tr className="bg-gray-200 font-bold">
         <td colSpan="2" className="border border-gray-400 p-3 text-center">Jumlah</td><td className="border border-gray-400 p-2 text-right">{f(t.c3)}</td><td className="border border-gray-400 p-2 text-right">{f(t.c4)}</td><td className="border border-gray-400 p-2 text-right">{f(t.c5)}</td><td className="border border-gray-400 p-2 text-right">{f(t.c6)}</td><td className="border border-gray-400 p-2 text-right text-emerald-800">{f(t.c7)}</td><td className="border border-gray-400 p-2 text-right">{f(t.c8)}</td><td className="border border-gray-400 p-2 text-right">{f(t.c9)}</td><td className="border border-gray-400 p-2 text-right">{f(t.c10)}</td><td className="border border-gray-400 p-2 text-right text-emerald-800">{f(t.c11)}</td><td className="border border-gray-400 p-2 text-right">{f(t.c12)}</td><td className="border border-gray-400 bg-gray-400"></td><td className="border border-gray-400 p-2 text-right">{f(t.c14)}</td><td className="border border-gray-400 bg-gray-400" colSpan="2"></td>
@@ -2322,13 +2323,13 @@ function FormSPRTT({ data, setData, readOnly, meta, rowLabels, wujudMap }) {
         <table id={tableId} className="w-full min-w-[1300px] border-collapse border border-gray-800 bg-white">
           <thead className="bg-gray-200 text-gray-800 text-xs text-center border-gray-800 align-middle">
             <tr>
-              <th rowSpan="3" className="border border-gray-800 p-2 font-bold w-10">No</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold min-w-[150px]">{meta.isRekap && meta.kom !== 'Semua Komoditas' ? 'Kecamatan' : 'Jenis Komoditas'}</th><th colSpan="9" className="border border-gray-800 p-2 font-bold bg-gray-300">Kondisi Semester Laporan</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-24">Produksi (Kg)</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-24">Produktivitas<br/>(Kg/Ha)</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-20">Jumlah<br/>Rumah<br/>Tangga<br/>Pekebun<br/>(KK)</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-24">Wujud<br/>produksi</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold min-w-[120px]">Keterangan</th>
+              <th rowSpan="3" className="border border-gray-800 p-2 font-bold w-10">No</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold min-w-[150px]">{meta.isRekap && meta.kom !== 'Semua Komoditas' ? 'Kecamatan' : 'Jenis Komoditas'}</th><th colSpan="9" className="border border-gray-800 p-2 font-bold bg-gray-300">Kondisi Semester Laporan</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-24">Produksi (Kg)</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-24">Produktivitas<br/>(Kg/Ha)</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-24">Jumlah<br/>Rumah<br/>Tangga<br/>Pekebun<br/>(KK)</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold w-24">Wujud<br/>produksi</th><th rowSpan="3" className="border border-gray-800 p-2 font-bold min-w-[120px]">Keterangan</th>
             </tr>
             <tr>
-              <th rowSpan="2" className="border border-gray-800 p-1 font-semibold w-20">Luas Tanaman<br/>akhir<br/>Semester lalu<br/>(ha)</th><th colSpan="3" className="border border-gray-800 p-1 font-semibold">Mutasi tanaman (ha)</th><th colSpan="5" className="border border-gray-800 p-1 font-semibold">Luas Areal (Ha)</th>
+              <th rowSpan="2" className="border border-gray-800 p-1 font-semibold w-24">Luas Tanaman<br/>akhir<br/>Semester lalu<br/>(ha)</th><th colSpan="3" className="border border-gray-800 p-1 font-semibold">Mutasi tanaman (ha)</th><th colSpan="5" className="border border-gray-800 p-1 font-semibold">Luas Areal (Ha)</th>
             </tr>
             <tr>
-              <th className="border border-gray-800 p-1 font-normal text-[11px] w-20">Peremajaan</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-20">Perluasan</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-20">Pengurangan</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24 bg-gray-100">Luas<br/>Tanaman<br/>Akhir<br/>Semester</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-20">TBM</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-20">TM</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-20">TTM/TR</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24 bg-gray-100">Jumlah</th>
+              <th className="border border-gray-800 p-1 font-normal text-[11px] w-24">Peremajaan</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24">Perluasan</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24">Pengurangan</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24 bg-gray-100">Luas<br/>Tanaman<br/>Akhir<br/>Semester</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24">TBM</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24">TM</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24">TTM/TR</th><th className="border border-gray-800 p-1 font-normal text-[11px] w-24 bg-gray-100">Jumlah</th>
             </tr>
           </thead>
           <tbody>{rowLabels.map((label, index) => renderRow(label, index))}{renderFooterRow()}</tbody>
